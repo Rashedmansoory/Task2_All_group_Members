@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ورود</title>
+</head>
+<body>
+    <h2>ورود</h2>
+
+    <form id="loginForm">
+        <label>ایمیل:</label>
+        <input id="email" type="email" required>
+        <br><br>
+
+        <label>رمز:</label>
+        <input id="password" type="password" required>
+        <br><br>
+
+        <button type="submit">ورود</button>
+    </form>
+
+    <p id="message"></p>
+
+    <p>اکانت ندارید؟
+        <a href="SignupPage.html">اکانت بسازید</a>
+    </p>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://ckthepqwqnywqvtungqo.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_0OmPATzqpcb5P9awJY8U-Q_Pim4-pod";
+
+        const db = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+        document.getElementById("loginForm")
+            .addEventListener("submit", async function(e) {
+                e.preventDefault();
+
+                const email =
+                    document.getElementById("email").value.trim();
+                const password =
+                    document.getElementById("password").value;
+
+                const message =
+                    document.getElementById("message");
+
+                const { error } = await db.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    message.textContent =
+                        "ورود ناموفق،رمز و ایمیل را بررسی کنید";
+                    return;
+                }
+
+                window.location.href = "Dashboard.html";
+            });
+    </script>
+</body>
+</html>

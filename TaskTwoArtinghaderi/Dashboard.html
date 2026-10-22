@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>داشبورد</title>
+</head>
+<body>
+    <h2>خوش آمدید</h2>
+    <p id="username">باگذاری</p>
+    <button id="logout">خروج از اکانت</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://ckthepqwqnywqvtungqo.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_0OmPATzqpcb5P9awJY8U-Q_Pim4-pod";
+
+        const db = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+        async function loadUser() {
+            const { data, error } = await db.auth.getUser();
+
+            if (error || !data.user) {
+                window.location.replace("LoginPage.html");
+                return;
+            }
+
+            document.getElementById("username").textContent =
+                "Username: " +
+                (data.user.user_metadata.username || data.user.email);
+        }
+
+        document.getElementById("logout")
+            .addEventListener("click", async function() {
+                const { error } = await db.auth.signOut();
+
+                if (error) {
+                    alert("خروج ناموفق");
+                    return;
+                }
+
+                window.location.href = "LoginPage.html";
+            });
+
+        loadUser();
+    </script>
+</body>
+</html>
