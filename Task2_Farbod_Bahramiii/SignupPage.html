@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ثبت‌نام | نُوا</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="shell">
+  <main class="panel">
+    <div class="brand"><span class="brand-mark">ن</span><span>نُوا</span></div>
+    <h1>حساب خودت را بساز</h1><p class="sub">چند قدم کوتاه تا ورود به فضای شخصی‌ات.</p>
+    <form id="signupForm">
+      <div class="field"><label for="username">نام کاربری</label><input id="username" type="text" placeholder="مثلاً armin" autocomplete="nickname" minlength="2" required></div>
+      <div class="field"><label for="email">ایمیل</label><input id="email" type="email" placeholder="name@example.com" autocomplete="email" required></div>
+      <div class="field"><label for="password">رمز عبور</label><input id="password" type="password" placeholder="حداقل ۸ کاراکتر" autocomplete="new-password" minlength="8" required></div>
+      <button class="submit" id="submitButton" type="submit">ساخت حساب کاربری</button>
+    </form>
+    <p class="message" id="message" aria-live="polite"></p>
+    <p class="switch">قبلاً ثبت‌نام کردی؟ <a href="LoginPage.html">وارد شو</a></p>
+  </main>
+  <aside class="visual"><div class="brand"><span class="brand-mark">ن</span><span>نُوا</span></div><div class="visual-content"><h2>یک حساب،<br>یک شروع تازه.</h2><p>ثبت‌نام کن تا اطلاعاتت در حساب خودت ذخیره شود و هر زمان دوباره به آن دسترسی داشته باشی.</p><div class="mini-card"><div class="mini-row"><span>فضای تو</span><span>خصوصی و شخصی</span></div><div class="bars"><span></span><span></span><span></span><span></span><span></span><span></span></div></div><div class="visual-foot">طراحی شده برای شروعی راحت</div></aside>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<script>
+document.getElementById("signupForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const username=document.getElementById("username").value.trim();
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+  const message=document.getElementById("message");
+  const button=document.getElementById("submitButton");
+  message.textContent="";button.disabled=true;button.textContent="در حال ساخت حساب...";
+  const {data,error}=await db.auth.signUp({email:email,password:password,options:{data:{username:username}}});
+  if(error){message.textContent=error.message;button.disabled=false;button.textContent="ساخت حساب کاربری";return;}
+  if(data.session){window.location.href="Dashboard.html";return;}
+  message.style.color="#287a52";message.textContent="ثبت‌نام انجام شد. ایمیلت را برای تأیید حساب بررسی کن؛ سپس وارد شو.";
+  button.disabled=false;button.textContent="ساخت حساب کاربری";
+});
+</script>
+</body></html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ورود | نُوا</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="shell">
+  <main class="panel">
+    <div class="brand"><span class="brand-mark">ن</span><span>نُوا</span></div>
+    <h1>خوش برگشتی</h1><p class="sub">برای ادامه، وارد حساب کاربری‌ات شو.</p>
+    <form id="loginForm">
+      <div class="field"><label for="email">ایمیل</label><input id="email" type="email" placeholder="name@example.com" autocomplete="email" required></div>
+      <div class="field"><label for="password">رمز عبور</label><input id="password" type="password" placeholder="رمز عبورت را وارد کن" autocomplete="current-password" required></div>
+      <button class="submit" id="submitButton" type="submit">ورود به حساب</button>
+    </form>
+    <p class="message" id="message" aria-live="polite"></p>
+    <p class="switch">حساب کاربری نداری؟ <a href="SignupPage.html">ثبت‌نام کن</a></p>
+  </main>
+  <aside class="visual"><div class="brand"><span class="brand-mark">ن</span><span>نُوا</span></div><div class="visual-content"><h2>شروعی ساده،<br>برای مسیرهای بزرگ.</h2><p>فضای شخصی‌ات را بساز، اطلاعاتت را یک‌جا نگه دار و با خیال راحت ادامه بده.</p><div class="mini-card"><div class="mini-row"><span>نمای کلی فعالیت</span><span>این هفته ↗</span></div><div class="bars"><span></span><span></span><span></span><span></span><span></span><span></span></div></div><div class="visual-foot">یک فضای امن برای حساب کاربری تو</div></aside>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<script>
+document.getElementById("loginForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+  const message=document.getElementById("message");
+  const button=document.getElementById("submitButton");
+  message.textContent=""; button.disabled=true; button.textContent="در حال ورود...";
+  const {error}=await db.auth.signInWithPassword({email:email,password:password});
+  if(error){message.textContent="ورود انجام نشد؛ ایمیل و رمز عبور را بررسی کن.";button.disabled=false;button.textContent="ورود به حساب";return;}
+  window.location.href="Dashboard.html";
+});
+</script>
+</body></html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>داشبورد | نُوا</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<main class="dash-shell">
+  <header class="dash-top"><div class="brand" style="margin:0"><span class="brand-mark">ن</span><span>نُوا</span></div><button class="logout" id="logout">خروج از حساب</button></header>
+  <section class="welcome"><h1 id="welcomeTitle">در حال بارگذاری...</h1><p>به فضای شخصی‌ات خوش آمدی. ورود تو با موفقیت انجام شده است.</p></section>
+  <section class="user-box"><strong>اطلاعات حساب</strong><div id="userInfo" class="loading">در حال دریافت اطلاعات...</div></section>
+  <p class="message" id="message" aria-live="polite"></p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<script>
+async function loadUser(){
+  const {data,error}=await db.auth.getUser();
+  if(error||!data.user){window.location.replace("LoginPage.html");return;}
+  const user=data.user;
+  const {data:profile}=await db.from("profiles").select("username").eq("id",user.id).maybeSingle();
+  const username=(profile&&profile.username)||user.user_metadata.username||user.email;
+  document.getElementById("welcomeTitle").textContent="سلام، "+username+"!";
+  document.getElementById("userInfo").innerHTML="نام کاربری: "+escapeHTML(username)+"<br>ایمیل: "+escapeHTML(user.email||"");
+}
+function escapeHTML(value){return String(value).replace(/[&<>\"']/g,function(char){return {"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;","'":"&#39;"}[char];});}
+document.getElementById("logout").addEventListener("click",async function(){
+  const message=document.getElementById("message");const {error}=await db.auth.signOut();
+  if(error){message.textContent="خروج انجام نشد. دوباره تلاش کن.";return;}
+  window.location.href="LoginPage.html";
+});
+loadUser();
+</script>
+</body></html>
