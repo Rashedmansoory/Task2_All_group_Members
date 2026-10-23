@@ -1,0 +1,905 @@
+[10/23/2026 10:53 PM] راشد: `html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه پیشرفته هوشمند | ورود و دیتابیس آنلاین</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Vazirmatn -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+
+        .glass-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+            outline: none;
+        }
+
+        /* Animated background mesh */
+        .bg-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-1 { top: -100px; right: -100px; background: #6366f1; }
+        .glow-2 { bottom: -100px; left: -100px; background: #ec4899; }
+        .glow-3 { top: 40%; left: 30%; background: #06b6d4; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-indigo-500 selection:text-white">
+
+    <!-- Ambient Glowing Backgrounds -->
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 left-5 z-50 flex flex-col gap-3 pointer-events-none max-w-sm w-full px-4"></div>
+[10/23/2026 10:53 PM] راشد: <!-- NAVBAR -->
+    <header class="sticky top-0 z-40 glass border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                        <i class="fa-solid fa-cube text-white text-xl"></i>
+                    </div>
+                    <span class="text-xl font-black tracking-wide gradient-text">آریا سامانه</span>
+                </div>
+
+                <!-- Nav Links -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                    <a href="#hero" class="hover:text-indigo-400 transition-colors">صفحه اصلی</a>
+                    <a href="#features" class="hover:text-indigo-400 transition-colors">امکانات</a>
+                    <a href="#dashboard-preview" class="hover:text-indigo-400 transition-colors">داشبورد</a>
+                    <a href="#about" class="hover:text-indigo-400 transition-colors">درباره ما</a>
+                </nav>
+
+                <!-- Dynamic Auth Status / Buttons -->
+                <div id="nav-auth-section" class="flex items-center gap-3">
+                    <!-- Logged Out State -->
+                    <div id="nav-logged-out" class="flex items-center gap-3">
+                        <button onclick="openAuthModal('login')" class="text-slate-300 hover:text-white px-4 py-2 rounded-xl text-sm font-medium transition-all hover:bg-slate-800">
+                            ورود
+                        </button>
+                        <button onclick="openAuthModal('signup')" class="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-indigo-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                            ثبت نام رایگان
+                        </button>
+                    </div>
+
+                    <!-- Logged In State (Hidden by default) -->
+                    <div id="nav-logged-in" class="hidden flex items-center gap-4">
+                        <div class="flex items-center gap-3 cursor-pointer" onclick="scrollToDashboard()">
+                            <img id="nav-user-avatar" src="https://placehold.co/100x100/4f46e5/ffffff?text=User" alt="آواتار" class="w-10 h-10 rounded-full border-2 border-indigo-500 object-cover shadow-md">
+                            <div class="hidden sm:block text-right">
+                                <div id="nav-user-name" class="text-sm font-bold text-slate-100">کاربر محترم</div>
+                                <div id="nav-user-email" class="text-xs text-slate-400">user@example.com</div>
+                            </div>
+                        </div>
+                        <button onclick="handleLogout()" class="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 p-2.5 rounded-xl transition-all" title="خروج از حساب">
+                            <i class="fa-solid fa-right-from-bracket text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="relative z-10 flex-grow">
+
+        <!-- HERO SECTION (When Logged Out) -->
+        <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8 text-center lg:text-right">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-indigo-500/30 text-indigo-300 text-xs font-semibold">
+[10/23/2026 10:53 PM] راشد: <span class="flex h-2 w-2 rounded-full bg-indigo-400 animate-ping"></span>
+                        متصل به دیتابیس ابری زنده Firestore
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight">
+                        مدیریت امن داده‌ها و <br>
+                        <span class="gradient-text">احراز هویت هوشمند</span>
+                    </h1>
+                    <p class="text-slate-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        تجربه‌ای بی‌نظیر از ثبت‌نام و ورود کاربر همراه با ذخیره‌سازی ابری آنلاین. اطلاعات شما به شکل لحظه‌ای و با ایمنی کامل در دیتابیس مدیریت می‌شوند.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <button onclick="openAuthModal('signup')" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-600 via-indigo-500 to-pink-500 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl shadow-indigo-500/20 transition-all transform hover:-translate-y-1">
+                            شروع کنید - حساب بسازید
+                        </button>
+                        <button onclick="openAuthModal('login')" class="w-full sm:w-auto px-8 py-4 glass hover:bg-slate-800/80 text-slate-200 font-semibold rounded-2xl transition-all">
+                            ورود به حساب کاربری
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hero Graphic Illustration -->
+                <div class="relative flex justify-center">
+                    <div class="w-full max-w-md glass-card rounded-3xl p-6 shadow-2xl relative overflow-hidden group border border-slate-700/50">
+                        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl"></div>
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                            </div>
+                            <span class="text-xs text-slate-500 font-mono">Status: Connected (Cloud)</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-lg"><i class="fa-solid fa-user-check"></i></div>
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-200">احراز هویت سریع</div>
+                                        <div class="text-xs text-slate-400">تأیید ایمیل و کدگذاری داده‌ها</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-2 py-1 rounded">فعال</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2.5 bg-indigo-500/10 text-indigo-400 rounded-lg"><i class="fa-solid fa-database"></i></div>
+                                    <div>
+[10/23/2026 10:53 PM] راشد: <div class="text-sm font-bold text-slate-200">پایگاه داده زنده</div>
+                                        <div class="text-xs text-slate-400">همگام‌سازی لحظه‌ای Firestore</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-indigo-400 font-bold bg-indigo-500/10 px-2 py-1 rounded">آنلاین</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2.5 bg-pink-500/10 text-pink-400 rounded-lg"><i class="fa-solid fa-shield-halved"></i></div>
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-200">امنیت پیشرفته</div>
+                                        <div class="text-xs text-slate-400">حفاظت از اطلاعات شخصی</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-pink-400 font-bold bg-pink-500/10 px-2 py-1 rounded">تضمین شده</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD SECTION (Shown when logged in or viewed) -->
+        <section id="dashboard-preview" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div id="auth-warning-banner" class="glass border-l-4 border-amber-500 p-6 rounded-2xl mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-amber-500/20 text-amber-400 rounded-xl">
+                        <i class="fa-solid fa-lock text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-200">شما هنوز وارد حساب خود نشده‌اید</h3>
+                        <p class="text-sm text-slate-400">برای مشاهده و مدیریت یادداشت‌های شخصی و ویرایش پروفایل خود وارد شوید.</p>
+                    </div>
+                </div>
+                <button onclick="openAuthModal('login')" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl text-sm transition-all whitespace-nowrap">
+                    ورود به حساب
+                </button>
+            </div>
+
+            <div id="dashboard-content" class="hidden space-y-8">
+                <!-- User Profile Banner -->
+                <div class="glass-card rounded-3xl p-6 md:p-8 relative overflow-hidden border border-slate-800">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-6 relative z-10">
+                        <div class="relative">
+                            <img id="dash-user-avatar" src="https://placehold.co/120x120/4f46e5/ffffff?text=User" alt="User Avatar" class="w-24 h-24 md:w-28 md:h-28 rounded-2xl object-cover border-2 border-indigo-500 shadow-xl">
+                            <span class="absolute -bottom-2 -right-2 bg-emerald-500 p-1.5 rounded-full border-4 border-slate-900" title="آنلاین"></span>
+                        </div>
+                        <div class="flex-grow text-center md:text-right space-y-2">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div>
+                                    <h2 id="dash-user-name" class="text-2xl font-black text-slate-100">کاربر گرامی</h2>
+                                    <p id="dash-user-email" class="text-sm text-slate-400 font-mono">email@example.com</p>
+[10/23/2026 10:53 PM] راشد: </div>
+                                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold self-center md:self-start">
+                                    <i class="fa-solid fa-id-badge"></i> کد کاربر: <span id="dash-user-id" class="font-mono">...</span>
+                                </span>
+                            </div>
+                            <!-- User Bio / Status Note -->
+                            <div class="mt-4 pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center gap-3">
+                                <input type="text" id="user-bio-input" placeholder="درباره خودتان بنویسید (بیوگرافی)..." class="glass-input w-full px-4 py-2 rounded-xl text-sm">
+                                <button onclick="saveUserBio()" class="w-full sm:w-auto px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-all whitespace-nowrap">
+                                    ذخیره بیوگرافی
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database CRUD Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Add Item Form -->
+                    <div class="lg:col-span-1 glass-card rounded-3xl p-6 border border-slate-800 space-y-5">
+                        <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+                            <div class="p-2.5 bg-indigo-500/10 text-indigo-400 rounded-xl">
+                                <i class="fa-solid fa-plus text-lg"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-200">افزودن داده جدید به Firestore</h3>
+                        </div>
+
+                        <form id="add-data-form" onsubmit="handleDataSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">عنوان یادداشت / فعالیت</label>
+                                <input type="text" id="data-title" required placeholder="مثلاً: پروژه فرانت‌اند" class="glass-input w-full px-4 py-3 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">توضیحات</label>
+                                <textarea id="data-desc" rows="3" placeholder="توضیحات تکمیلی..." class="glass-input w-full px-4 py-3 rounded-xl text-sm resize-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">اولویت</label>
+                                <select id="data-priority" class="glass-input w-full px-4 py-3 rounded-xl text-sm bg-slate-900">
+                                    <option value="معمولی">معمولی</option>
+                                    <option value="مهم">مهم</option>
+                                    <option value="ضروری">ضروری</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="btn-save-data" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> ذخیره در دیتابیس
+                            </button>
+                        </form>
+                    </div>
+[10/23/2026 10:53 PM] راشد: <!-- Items List (Data from Firestore) -->
+                    <div class="lg:col-span-2 glass-card rounded-3xl p-6 border border-slate-800 space-y-5">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2.5 bg-pink-500/10 text-pink-400 rounded-xl">
+                                    <i class="fa-solid fa-list-check text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-slate-200">داده‌های ذخیره شده شما</h3>
+                                    <p class="text-xs text-slate-400">همگام‌سازی زنده با پایگاه داده abri</p>
+                                </div>
+                            </div>
+                            <span id="items-count-badge" class="px-3 py-1 bg-slate-800 text-slate-300 text-xs rounded-full font-bold">0 داده</span>
+                        </div>
+
+                        <div id="firestore-data-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-1">
+                            <!-- Items will be dynamically inserted here -->
+                            <div class="text-center py-12 text-slate-500">
+                                <i class="fa-solid fa-spinner animate-spin text-2xl mb-2"></i>
+                                <p class="text-sm">در حال دریافت اطلاعات از دیتابیس...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/80 glass mt-12 py-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-sm">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-cube text-indigo-500"></i>
+                <span>طراحی شده با تکنولوژی‌های مدرن وب &copy; 1403</span>
+            </div>
+            <div class="flex items-center gap-6 text-xs">
+                <a href="#" class="hover:text-indigo-400 transition-colors">قوانین و مقررات</a>
+                <a href="#" class="hover:text-indigo-400 transition-colors">حریم خصوصی</a>
+                <a href="#" class="hover:text-indigo-400 transition-colors">پشتیبانی</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AUTH MODAL (Login & Signup Togglable) -->
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="relative w-full max-w-md glass-card rounded-3xl p-8 border border-slate-700/60 shadow-2xl transform scale-95 transition-transform duration-300" id="auth-modal-content">
+            
+            <!-- Close Button -->
+            <button onclick="closeAuthModal()" class="absolute top-5 left-5 text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <!-- Modal Header / Tabs Switcher -->
+            <div class="flex items-center justify-center gap-2 bg-slate-900/80 p-1.5 rounded-2xl mb-8 border border-slate-800">
+                <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all bg-indigo-600 text-white shadow-md">
+                    ورود به حساب
+                </button>
+                <button id="tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-400 hover:text-slate-200">
+                    ثبت‌نام جدید
+                </button>
+            </div>
+[10/23/2026 10:53 PM] راشد: <!-- FORM: LOGIN -->
+            <form id="login-form" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">پست الکترونیکی (ایمیل)</label>
+                    <div class="relative">
+                        <i class="fa-regular fa-envelope absolute right-4 top-3.5 text-slate-400"></i>
+                        <input type="email" id="login-email" required placeholder="name@example.com" class="glass-input w-full pr-11 pl-4 py-3 rounded-xl text-sm font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-semibold text-slate-300">رمز عبور</label>
+                        <a href="#" onclick="showToast('جهت بازیابی رمز با پشتیبانی تماس بگیرید', 'info')" class="text-xs text-indigo-400 hover:text-indigo-300">رمز را فراموش کردید؟</a>
+                    </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute right-4 top-3.5 text-slate-400"></i>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="glass-input w-full pr-11 pl-4 py-3 rounded-xl text-sm font-mono">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 py-1">
+                    <input type="checkbox" id="remember-me" class="rounded border-slate-700 bg-slate-900 text-indigo-600 focus:ring-indigo-500">
+                    <label for="remember-me" class="text-xs text-slate-300">مرا به خاطر بسپار</label>
+                </div>
+
+                <button type="submit" id="btn-login-submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2">
+                    <span>ورود به سیستم</span>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            </form>
+
+            <!-- FORM: SIGNUP -->
+            <form id="signup-form" onsubmit="handleSignupSubmit(event)" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">نام و نام خانوادگی</label>
+                    <div class="relative">
+                        <i class="fa-regular fa-user absolute right-4 top-3.5 text-slate-400"></i>
+                        <input type="text" id="signup-name" required placeholder="علی محمدی" class="glass-input w-full pr-11 pl-4 py-3 rounded-xl text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">پست الکترونیکی (ایمیل)</label>
+                    <div class="relative">
+                        <i class="fa-regular fa-envelope absolute right-4 top-3.5 text-slate-400"></i>
+                        <input type="email" id="signup-email" required placeholder="name@example.com" class="glass-input w-full pr-11 pl-4 py-3 rounded-xl text-sm font-mono">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">رمز عبور</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute right-4 top-3.5 text-slate-400"></i>
+                        <input type="password" id="signup-password" oninput="checkPasswordStrength(this.value)" required placeholder="حداقل ۶ کاراکتر" class="glass-input w-full pr-11 pl-4 py-3 rounded-xl text-sm font-mono">
+                    </div>
+[10/23/2026 10:53 PM] راشد: <!-- Strength indicator bar -->
+                    <div class="mt-2 h-1.5 w-full bg-slate-800 rounded-full overflow-hidden flex">
+                        <div id="strength-bar" class="h-full w-0 bg-rose-500 transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">تکرار رمز عبور</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-shield-halved absolute right-4 top-3.5 text-slate-400"></i>
+                        <input type="password" id="signup-confirm-password" required placeholder="••••••••" class="glass-input w-full pr-11 pl-4 py-3 rounded-xl text-sm font-mono">
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-signup-submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-pink-500 hover:opacity-95 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2">
+                    <span>ایجاد حساب کاربری</span>
+                    <i class="fa-solid fa-user-plus"></i>
+                </button>
+            </form>
+
+            <!-- Quick Action Divider & Google Login Button -->
+            <div class="mt-6 border-t border-slate-800 pt-6">
+                <div class="relative flex justify-center text-xs text-slate-500 mb-4">
+                    <span class="bg-slate-900 px-3 absolute -top-3">یا ورود سریع با</span>
+                </div>
+                <button type="button" onclick="handleGoogleSignIn()" class="w-full py-3 glass hover:bg-slate-800/80 text-slate-200 text-sm font-semibold rounded-xl transition-all flex items-center justify-center gap-3">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/>
+                        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
+                        <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12s.7 2.3 1.9 4.7l3.7-2.9z"/>
+                        <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"/>
+                    </svg>
+                    <span>حساب کاربری گوگل</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE SDK & APP SCRIPT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithCustomToken, 
+            signInAnonymously, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged,
+            GoogleAuthProvider,
+            signInWithPopup,
+            updateProfile
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            setDoc, 
+            updateDoc, 
+            deleteDoc, 
+            collection, 
+            onSnapshot, 
+            addDoc,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase Configuration Handling
+        const appId = typeof app_id !== 'undefined' ? app_id : 'aria-auth-app';
+        
+        // Dynamic Firebase Config setup with fallback
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config)
+[10/23/2026 10:53 PM] راشد: : {
+                apiKey: "AIzaSyDemoKeyOnlyForRenderPreview_12345",
+                authDomain: "aria-app-demo.firebaseapp.com",
+                projectId: "aria-app-demo",
+                storageBucket: "aria-app-demo.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456789:web:abcdef123456"
+            };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // State Variables
+        let currentUser = null;
+        let unsubscribeDataList = null;
+
+        // Custom Helper Functions attached to Window for HTML Handlers
+        window.openAuthModal = function(tab = 'login') {
+            const modal = document.getElementById('auth-modal');
+            const content = document.getElementById('auth-modal-content');
+            switchAuthTab(tab);
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        };
+
+        window.closeAuthModal = function() {
+            const modal = document.getElementById('auth-modal');
+            const content = document.getElementById('auth-modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+        };
+
+        window.switchAuthTab = function(tab) {
+            const tabLogin = document.getElementById('tab-login');
+            const tabSignup = document.getElementById('tab-signup');
+            const formLogin = document.getElementById('login-form');
+            const formSignup = document.getElementById('signup-form');
+
+            if (tab === 'login') {
+                tabLogin.className = "flex-1 py-2.5 rounded-xl text-sm font-bold transition-all bg-indigo-600 text-white shadow-md";
+                tabSignup.className = "flex-1 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-400 hover:text-slate-200";
+                formLogin.classList.remove('hidden');
+                formSignup.classList.add('hidden');
+            } else {
+                tabSignup.className = "flex-1 py-2.5 rounded-xl text-sm font-bold transition-all bg-indigo-600 text-white shadow-md";
+                tabLogin.className = "flex-1 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-400 hover:text-slate-200";
+                formSignup.classList.remove('hidden');
+                formLogin.classList.add('hidden');
+            }
+        };
+
+        window.showToast = function(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = 'bg-slate-800 border-slate-700 text-slate-200';
+            let icon = 'fa-circle-info text-indigo-400';
+
+            if (type === 'success') {
+                bgClass = 'bg-emerald-950/90 border-emerald-500/40 text-emerald-200';
+                icon = 'fa-circle-check text-emerald-400';
+            } else if (type === 'error') {
+                bgClass = 'bg-rose-950/90 border-rose-500/40 text-rose-200';
+                icon = 'fa-circle-xmark text-rose-400';
+            }
+
+            toast.className = pointer-events-auto flex items-center gap-3 p-4 rounded-2xl border glass shadow-2xl transition-all duration-300 transform translate-x-full ${bgClass};
+            toast.innerHTML = 
+                <i class="fa-solid ${icon} text-lg"></i>
+                <div class="text-xs font-semibold flex-grow">${message}</div>
+            ;
+
+            container.appendChild(toast);
+            
+            // Animate In
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 10);
+[10/23/2026 10:53 PM] راشد: // Auto Remove
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        };
+
+        window.checkPasswordStrength = function(pwd) {
+            const bar = document.getElementById('strength-bar');
+            if (!pwd) {
+                bar.style.width = '0%';
+                return;
+            }
+            if (pwd.length < 6) {
+                bar.style.width = '30%';
+                bar.className = 'h-full bg-rose-500 transition-all duration-300';
+            } else if (pwd.length < 10) {
+                bar.style.width = '65%';
+                bar.className = 'h-full bg-amber-500 transition-all duration-300';
+            } else {
+                bar.style.width = '100%';
+                bar.className = 'h-full bg-emerald-500 transition-all duration-300';
+            }
+        };
+
+        window.scrollToDashboard = function() {
+            document.getElementById('dashboard-preview').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // Initialize Authentication Listener First
+        async function initAuth() {
+            try {
+                if (typeof initial_auth_token !== 'undefined' && initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                }
+            } catch (err) {
+                console.log("Token auth fallback:", err.message);
+            }
+
+            onAuthStateChanged(auth, async (user) => {
+                currentUser = user;
+                if (user) {
+                    // Update UI for Logged in user
+                    document.getElementById('nav-logged-out').classList.add('hidden');
+                    document.getElementById('nav-logged-in').classList.remove('hidden');
+                    document.getElementById('auth-warning-banner').classList.add('hidden');
+                    document.getElementById('dashboard-content').classList.remove('hidden');
+
+                    const displayName = user.displayName || 'کاربر سیستم';
+                    const email = user.email || 'ارائه‌نشده';
+                    const avatar = user.photoURL || https://placehold.co/100x100/4f46e5/ffffff?text=${encodeURIComponent(displayName.charAt(0))};
+
+                    document.getElementById('nav-user-name').textContent = displayName;
+                    document.getElementById('nav-user-email').textContent = email;
+                    document.getElementById('nav-user-avatar').src = avatar;
+
+                    document.getElementById('dash-user-name').textContent = displayName;
+                    document.getElementById('dash-user-email').textContent = email;
+                    document.getElementById('dash-user-avatar').src = avatar;
+                    document.getElementById('dash-user-id').textContent = user.uid;
+
+                    // Fetch user Bio details from Firestore User Document (RULE 1 Path)
+                    const userDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'details');
+                    try {
+                        const snap = await getDoc(userDocRef);
+                        if (snap.exists()) {
+                            document.getElementById('user-bio-input').value = snap.data().bio || '';
+                        }
+                    } catch (e) {
+                        console.error("Error reading profile:", e);
+                    }
+
+                    // Attach Realtime Listener to Firestore user items
+                    listenToUserItems(user.uid);
+                    closeAuthModal();
+                } else {
+                    // Logged out state
+                    document.getElementById('nav-logged-out').classList.remove('hidden');
+                    document.getElementById('nav-logged-in').classList.add('hidden');
+                    document.getElementById('auth-warning-banner').classList.remove('hidden');
+                    document.getElementById('dashboard-content').classList.add('hidden');
+[10/23/2026 10:53 PM] راشد: if (unsubscribeDataList) {
+                        unsubscribeDataList();
+                        unsubscribeDataList = null;
+                    }
+                }
+            });
+        }
+
+        // --- AUTH HANDLERS ---
+        window.handleLoginSubmit = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('btn-login-submit');
+
+            btn.disabled = true;
+            btn.innerHTML = <i class="fa-solid fa-spinner animate-spin"></i> در حال بررسی...;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                showToast('با موفقیت وارد حساب خود شدید!', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('ایمیل یا رمز عبور اشتباه است.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = <span>ورود به سیستم</span><i class="fa-solid fa-arrow-left"></i>;
+            }
+        };
+
+        window.handleSignupSubmit = async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPwd = document.getElementById('signup-confirm-password').value;
+            const btn = document.getElementById('btn-signup-submit');
+
+            if (password !== confirmPwd) {
+                showToast('رمز عبور و تکرار آن یکسان نیستند.', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showToast('رمز عبور باید حداقل ۶ کاراکتر باشد.', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = <i class="fa-solid fa-spinner animate-spin"></i> در حال ساخت حساب...;
+
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(cred.user, { displayName: name });
+
+                // Create initial user doc in Firestore (RULE 1 Strict Path)
+                const userDocRef = doc(db, 'artifacts', appId, 'users', cred.user.uid, 'profile', 'details');
+                await setDoc(userDocRef, {
+                    name: name,
+                    email: email,
+                    createdAt: serverTimestamp(),
+                    bio: 'به آریا سامانه خوش آمدید!'
+                });
+
+                showToast('حساب کاربری شما با موفقیت ساخته شد!', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('خطا در ثبت نام: ' + (err.message.includes('email-already-in-use') ? 'این ایمیل قبلاً ثبت شده است.' : 'مشکلی رخ داد.'), 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = <span>ایجاد حساب کاربری</span><i class="fa-solid fa-user-plus"></i>;
+            }
+        };
+
+        window.handleGoogleSignIn = async function() {
+            try {
+                const provider = new GoogleAuthProvider();
+                await signInWithPopup(auth, provider);
+                showToast('ورود با گوگل با موفقیت انجام شد.', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('ورود با گوگل ناموفق بود.', 'error');
+            }
+        };
+
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                showToast('از حساب کاربری خارج شدید.', 'info');
+            } catch (err) {
+                showToast('خطا در خروج از حساب.', 'error');
+            }
+        };
+[10/23/2026 10:53 PM] راشد: window.saveUserBio = async function() {
+            if (!currentUser) return;
+            const bio = document.getElementById('user-bio-input').value;
+            const userDocRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'profile', 'details');
+            
+            try {
+                await setDoc(userDocRef, { bio: bio }, { merge: true });
+                showToast('بیوگرافی شما به‌روزرسانی شد.', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('خطا در ذخیره بیوگرافی.', 'error');
+            }
+        };
+
+        // --- FIRESTORE DATABASE CRUD OPERATIONS ---
+        window.handleDataSubmit = async function(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const title = document.getElementById('data-title').value;
+            const desc = document.getElementById('data-desc').value;
+            const priority = document.getElementById('data-priority').value;
+            const btn = document.getElementById('btn-save-data');
+
+            btn.disabled = true;
+            btn.innerHTML = <i class="fa-solid fa-spinner animate-spin"></i> در حال ذخیره‌سازی...;
+
+            try {
+                // RULE 1: Private User Data Path
+                const userItemsCol = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'user_items');
+                await addDoc(userItemsCol, {
+                    title: title,
+                    description: desc,
+                    priority: priority,
+                    createdAt: serverTimestamp()
+                });
+
+                document.getElementById('add-data-form').reset();
+                showToast('داده جدید در دیتابیس Firestore ثبت شد!', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('خطا در ثبت اطلاعات در دیتابیس.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = <i class="fa-solid fa-cloud-arrow-up"></i> ذخیره در دیتابیس;
+            }
+        };
+
+        function listenToUserItems(userId) {
+            if (unsubscribeDataList) unsubscribeDataList();
+
+            // RULE 1: Strict User Specific Path
+            const colRef = collection(db, 'artifacts', appId, 'users', userId, 'user_items');
+
+            // RULE 2: Simple Collection Query (Sort in JS memory)
+            unsubscribeDataList = onSnapshot(colRef, (snapshot) => {
+                const listContainer = document.getElementById('firestore-data-list');
+                const badge = document.getElementById('items-count-badge');
+                badge.textContent = ${snapshot.docs.length} داده;
+
+                if (snapshot.empty) {
+                    listContainer.innerHTML = 
+                        <div class="text-center py-10 border border-dashed border-slate-800 rounded-2xl">
+                            <i class="fa-solid fa-folder-open text-3xl text-slate-600 mb-2"></i>
+                            <p class="text-sm text-slate-400">هیچ داده‌ای ثبت نشده است. از فرم سمت راست اضافه کنید!</p>
+                        </div>
+                    ;
+                    return;
+                }
+
+                let items = [];
+                snapshot.forEach(docSnap => {
+                    items.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                // Client-side Sorting by Timestamp
+                items.sort((a, b) => (b.createdAt?.seconds  0) - (a.createdAt?.seconds  0));
+
+                listContainer.innerHTML = items.map(item => {
+                    let badgeBg = 'bg-slate-800 text-slate-300';
+                    if (item.priority === 'ضروری') badgeBg = 'bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                    if (item.priority === 'مهم') badgeBg = 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+[10/23/2026 10:53 PM] راشد: return 
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-all flex items-start justify-between gap-4 group">
+                            <div class="space-y-1 flex-grow">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-bold text-slate-100 text-sm">${escapeHtml(item.title)}</h4>
+                                    <span class="text-[10px] px-2.5 py-0.5 rounded-full font-semibold ${badgeBg}">${item.priority || 'معمولی'}</span>
+                                </div>
+                                <p class="text-xs text-slate-400 leading-relaxed">${escapeHtml(item.description || 'بدون توضیح')}</p>
+                            </div>
+                            <button onclick="deleteItem('${item.id}')" class="text-slate-500 hover:text-rose-400 p-2 rounded-xl hover:bg-rose-500/10 transition-all opacity-80 group-hover:opacity-100" title="حذف داده">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    ;
+                }).join('');
+            }, (error) => {
+                console.error("Firestore error:", error);
+                showToast('خطا در بارگیری اطلاعات دیتابیس.', 'error');
+            });
+        }
+
+        window.deleteItem = async function(docId) {
+            if (!currentUser) return;
+            try {
+                const itemRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'user_items', docId);
+                await deleteDoc(itemRef);
+                showToast('آیتم با موفقیت حذف شد.', 'info');
+            } catch (err) {
+                console.error(err);
+                showToast('خطا در حذف آیتم.', 'error');
+            }
+        };
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize when DOM Ready
+        window.addEventListener('DOMContentLoaded', () => {
+            initAuth();
+        });
+    </script>
+</body>
+</html>
+`
