@@ -1,0 +1,157 @@
+<mxfile host="app.diagrams.net" modified="2026-10-23T21:38:00.000Z" agent="Gemini"
+version="21.0.0" type="device"> <diagram id="usecase-diag" name="1. Use Case Diagram">
+<mxGraphModel dx="1000" dy="600" grid="1" gridSize="10" guides="1" tooltips="1"
+connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169"
+math="0" shadow="0"> <root> <mxCell id="0" /> <mxCell id="1" parent="0" />
+<!-- System Boundary --> <mxCell id="sys_bound" value="آنالین دیتابیس و سامانه"
+style="shape=rect;html=1;whiteSpace=wrap;align=center;verticalAlign=top;fontStyle=1;fillColor=
+#f5f5f5;fontColor=#333333;strokeColor=#cccccc;fontSize=14;" vertex="1" parent="1">
+<mxGeometry x="240" y="40" width="340" height="520" as="geometry" /> </mxCell>
+<!-- Actors --> <mxCell id="actor_guest" value="مهمان کاربر"
+style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0
+;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"> <mxGeometry x="100" y="150"
+width="40" height="80" as="geometry" /> </mxCell>
+<mxCell id="actor_user" value="عضو کاربر"
+style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0
+;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"> <mxGeometry x="100"
+y="380" width="40" height="80" as="geometry" /> </mxCell>
+<mxCell id="actor_google" value="گوگل سرویس"
+style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0
+;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"> <mxGeometry x="680" y="150"
+width="40" height="80" as="geometry" /> </mxCell>
+<!-- Use Cases --> <mxCell id="uc1" value="اصلی صفحه مشاهده"
+style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1"
+parent="1"> <mxGeometry x="320" y="80" width="180" height="50" as="geometry" /> </mxCell>
+"ثبتنام با ایمیل و رمز"=value" 2uc="id mxCell<
+style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1"
+parent="1"> <mxGeometry x="320" y="140" width="180" height="50" as="geometry" />
+</mxCell>
+"ورود به حساب کاربری"=value" 3uc="id mxCell<
+style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1"
+parent="1"> <mxGeometry x="320" y="200" width="180" height="50" as="geometry" />
+</mxCell>
+"ورود سریع با گوگل"=value" 4uc="id mxCell<
+style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1"
+parent="1"> <mxGeometry x="320" y="260" width="180" height="50" as="geometry" />
+</mxCell>
+<mxCell id="uc5" value="بیوگرافی / پروفایل ویرایش"
+style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1"
+parent="1"> <mxGeometry x="320" y="330" width="180" height="50" as="geometry" />
+</mxCell>
+<mxCell id="uc6" value="یادداشت مدیریت / افزودن"
+style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1"
+parent="1"> <mxGeometry x="320" y="390" width="180" height="50" as="geometry" />
+</mxCell>
+"خروج از حساب کاربری"=value" 7uc="id mxCell<
+style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1"
+parent="1"> <mxGeometry x="320" y="450" width="180" height="50" as="geometry" />
+</mxCell> <!-- Edges --> <mxCell id="e1" edge="1" parent="1" source="actor_guest"
+target="uc1"><mxGeometry relative="1" as="geometry" /></mxCell> <mxCell id="e2" edge="1"
+parent="1" source="actor_guest" target="uc2"><mxGeometry relative="1" as="geometry"
+/></mxCell> <mxCell id="e3" edge="1" parent="1" source="actor_guest"
+target="uc3"><mxGeometry relative="1" as="geometry" /></mxCell> <mxCell id="e4" edge="1"
+parent="1" source="actor_guest" target="uc4"><mxGeometry relative="1" as="geometry"
+/></mxCell> <mxCell id="e5" edge="1" parent="1" source="actor_google"
+target="uc4"><mxGeometry relative="1" as="geometry" /></mxCell> <mxCell id="e6" edge="1"
+parent="1" source="actor_user" target="uc5"><mxGeometry relative="1" as="geometry"
+/></mxCell> <mxCell id="e7" edge="1" parent="1" source="actor_user"
+target="uc6"><mxGeometry relative="1" as="geometry" /></mxCell> <mxCell id="e8" edge="1"
+parent="1" source="actor_user" target="uc7"><mxGeometry relative="1" as="geometry"
+/></mxCell> </root> </mxGraphModel> </diagram>
+<diagram id="class-diag" name="2. Class Diagram"> <mxGraphModel dx="1000" dy="600"
+grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1"
+pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0"> <root> <mxCell
+id="0" /> <mxCell id="1" parent="0" />
+<!-- User Class --> <mxCell id="cls_user" value="User -- + uid: String + name: String + email:
+String + bio: String -- + register() + login() + logout() + updateBio()"
+style="swipeable=0;html=1;shape=mxgraph.bootstrap.rrect;rSize=5;fillColor=#e1d5e7;strokeCol
+or=#9673a6;align=center;verticalAlign=top;fontStyle=1;whiteSpace=wrap;" vertex="1"
+parent="1"> <mxGeometry x="100" y="100" width="180" height="180" as="geometry" />
+</mxCell>
+<!-- Note Class --> <mxCell id="cls_note" value="Note -- + id: String + userId: String + title:
+String + description: String + priority: String + createdAt: Timestamp -- + create() + delete()"
+style="swipeable=0;html=1;shape=mxgraph.bootstrap.rrect;rSize=5;fillColor=#dae8fc;strokeCol
+or=#6c8ebf;align=center;verticalAlign=top;fontStyle=1;whiteSpace=wrap;" vertex="1"
+parent="1"> <mxGeometry x="420" y="100" width="180" height="180" as="geometry" />
+</mxCell>
+<!-- Association --> <mxCell id="assoc1" value="1 owns *"
+style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;align=center;verticalAlign=botto
+m;" edge="1" parent="1" source="cls_user" target="cls_note"> <mxGeometry relative="1"
+as="geometry" /> </mxCell> </root> </mxGraphModel> </diagram>
+<diagram id="sequence-diag" name="3. Sequence Diagram"> <mxGraphModel dx="1000"
+dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1"
+page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0"> <root>
+<mxCell id="0" /> <mxCell id="1" parent="0" />
+<!-- Lifelines --> <mxCell id="part_user" value="User"
+style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;coll
+apsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;"
+vertex="1" parent="1"> <mxGeometry x="80" y="80" width="100" height="300" as="geometry" />
+</mxCell>
+<mxCell id="part_ui" value="UI (Frontend)"
+style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;coll
+apsible=0;recursiveResize=0;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+vertex="1" parent="1"> <mxGeometry x="280" y="80" width="100" height="300" as="geometry"
+/> </mxCell>
+<mxCell id="part_auth" value="Firebase Auth" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;coll
+apsible=0;recursiveResize=0;outlineConnect=0;fillColor=#e1d5e7;strokeColor=#9673a6;"
+vertex="1" parent="1"> <mxGeometry x="480" y="80" width="100" height="300" as="geometry"
+/> </mxCell>
+<mxCell id="part_db" value="Firestore DB"
+style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;coll
+apsible=0;recursiveResize=0;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;"
+vertex="1" parent="1"> <mxGeometry x="680" y="80" width="100" height="300" as="geometry"
+/> </mxCell>
+<!-- Messages --> <mxCell id="m1" value="1. ثبتنام اطالعات ثبت"
+style="html=1;verticalAlign=bottom;endArrow=block;" edge="1" parent="1"> <mxGeometry
+width="80" relative="1" as="geometry"> <mxPoint x="130" y="150" as="sourcePoint" />
+<mxPoint x="330" y="150" as="targetPoint" /> </mxGeometry> </mxCell>
+<mxCell id="m2" value="2. createUserWithEmailAndPassword()"
+style="html=1;verticalAlign=bottom;endArrow=block;" edge="1" parent="1"> <mxGeometry
+width="80" relative="1" as="geometry"> <mxPoint x="330" y="180" as="sourcePoint" />
+<mxPoint x="530" y="180" as="targetPoint" /> </mxGeometry> </mxCell>
+<mxCell id="m3" value="3. بازگشت و تایید UID"
+style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;" edge="1" parent="1">
+<mxGeometry width="80" relative="1" as="geometry"> <mxPoint x="530" y="210"
+as="sourcePoint" /> <mxPoint x="330" y="210" as="targetPoint" /> </mxGeometry> </mxCell>
+<mxCell id="m4" value="4. setDoc(User Profile)"
+style="html=1;verticalAlign=bottom;endArrow=block;" edge="1" parent="1"> <mxGeometry
+width="80" relative="1" as="geometry"> <mxPoint x="330" y="240" as="sourcePoint" />
+<mxPoint x="730" y="240" as="targetPoint" /> </mxGeometry> </mxCell>
+"نمایش وضعیت الگین و داشبورد 5."=value" 5m="id mxCell<
+style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;" edge="1" parent="1">
+<mxGeometry width="80" relative="1" as="geometry"> <mxPoint x="330" y="280"
+as="sourcePoint" /> <mxPoint x="130" y="280" as="targetPoint" /> </mxGeometry> </mxCell>
+</root> </mxGraphModel> </diagram>
+<diagram id="activity-diag" name="5. Activity Diagram"> <mxGraphModel dx="1000" dy="600"
+grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1"
+pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0"> <root> <mxCell
+id="0" /> <mxCell id="1" parent="0" />
+<mxCell id="act_start" value=""
+style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;" vertex="1"
+parent="1"> <mxGeometry x="385" y="40" width="30" height="30" as="geometry" /> </mxCell>
+"دریافت عنوان و توضیحات از کاربر"=value" 1act="id mxCell<
+style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1"
+parent="1"> <mxGeometry x="310" y="110" width="180" height="50" as="geometry" />
+</mxCell>
+<mxCell id="act_cond" value="است؟ خالی عنوان"
+style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1"
+parent="1"> <mxGeometry x="330" y="190" width="140" height="80" as="geometry" />
+</mxCell>
+<mxCell id="act_err" value="نمایش Toast خطا"
+style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1"
+parent="1"> <mxGeometry x="140" y="205" width="130" height="50" as="geometry" /> </mxCell>
+<mxCell id="act_save" value="در داده ذخیره Firestore"
+style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;"
+vertex="1" parent="1"> <mxGeometry x="320" y="310" width="160" height="50" as="geometry"
+/> </mxCell>
+<mxCell id="act_end" value=""
+style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" vertex="1"
+parent="1"> <mxGeometry x="385" y="400" width="30" height="30" as="geometry" /> </mxCell>
+<mxCell id="ae1" edge="1" parent="1" source="act_start" target="act1"><mxGeometry
+relative="1" as="geometry" /></mxCell> <mxCell id="ae2" edge="1" parent="1" source="act1"
+target="act_cond"><mxGeometry relative="1" as="geometry" /></mxCell> <mxCell id="ae3"
+value="بله "edge="1" parent="1" source="act_cond" target="act_err"><mxGeometry relative="1"
+as="geometry" /></mxCell> <mxCell id="ae4" value="خیر "edge="1" parent="1"
+source="act_cond" target="act_save"><mxGeometry relative="1" as="geometry" /></mxCell>
+<mxCell id="ae5" edge="1" parent="1" source="act_save" target="act_end"><mxGeometry
+relative="1" as="geometry" /></mxCell> </root> </mxGraphModel> </diagram> </mxfile>
